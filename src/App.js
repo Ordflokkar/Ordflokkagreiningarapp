@@ -1,127 +1,13 @@
 import React, { useState } from 'react';
 import './App.css';
 import Homepage from './Homepage';
+import { questions } from './questions';
 
 function App() {
-  const [currentQuestion, setCurrentQuestion] = useState(-1); // -1 táknar forsíðu
+  const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [word, setWord] = useState('');
   const [result, setResult] = useState('');
-
-  const questions = [
-    {
-      question: "Sláðu inn orð til að greina. Ef hægt er að fallbeygja orðið þarf það að vera í eintölu og nefnifalli ef kostur er.",
-      type: "input",
-      next: 1
-    },
-    {
-      question: "Er hægt að fallbeygja orðið?",
-      type: "yesno",
-      onYes: 2,
-      onNo: 13
-    },
-    {
-      question: "Flott! Orðið er fallorð. Viltu greina það í undirflokka?",
-      type: "yesno",
-      onYes: 3,
-      onNo: () => "fallorð"
-    },
-    {
-      question: "Tekur orðið við greini?",
-      type: "yesno",
-      onYes: () => "nafnorð",
-      onNo: 4
-    },
-    {
-      question: "Stigbreytist orðið?",
-      type: "yesno",
-      onYes: () => "lýsingarorð",
-      onNo: 5
-    },
-    {
-      question: "Er orðið töluorð?",
-      type: "yesno",
-      onYes: () => "töluorð",
-      onNo: 6
-    },
-    {
-      question: "Er orðið greinirinn hinn/hin/hið sem stendur við hlið nafnorðs? (Dæmi: Hin góða kona).",
-      type: "yesno",
-      onYes: () => "greinir",
-      onNo: 7
-    },
-    {
-      question: "Flott! Orðið er fornafn. Viltu greina það í undirflokka?",
-      type: "yesno",
-      onYes: 8,
-      onNo: () => "fornafn"
-    },
-    {
-      question: "Er orðið Ég, þú, hann, hún, hán eða það?",
-      type: "yesno",
-      onYes: () => "persónufornafn",
-      onNo: 9
-    },
-    {
-      question: "Vísar orðið til eignar á einhverjum hlut?",
-      type: "yesno",
-      onYes: () => "eignarfornafn",
-      onNo: 10
-    },
-    {
-      question: "Er orðið afturbeygða fornafnið sig (sér/sín)?",
-      type: "yesno",
-      onYes: () => "afturbeygt fornafn",
-      onNo: 11
-    },
-    {
-      question: "Er orðið sá, þessi eða hinn?",
-      type: "yesno",
-      onYes: () => "ábendingarfornafn",
-      onNo: 12
-    },
-    {
-      question: "Er orðið hver, hvor, hvaða eða hvílíkur?",
-      type: "yesno",
-      onYes: () => "spurnarfornafn",
-      onNo: () => "óákveðið fornafn"
-    },
-    {
-      question: "Er hægt að setja orðið í þátíð?",
-      type: "yesno",
-      onYes: () => "sagnorð",
-      onNo: 14
-    },
-    {
-      question: "Flott! Orðið er smáorð. Viltu greina það í undirflokka?",
-      type: "yesno",
-      onYes: 15,
-      onNo: () => "smáorð"
-    },
-    {
-      question: "Stýrir orðið falli? Það er að segja, er fallorð í þolfalli, þágufalli eða eignarfalli á eftir orðinu?",
-      type: "yesno",
-      onYes: () => "forsetning",
-      onNo: 16
-    },
-    {
-      question: "Tengir orðið saman tvö orð eða tvær setningar?",
-      type: "yesno",
-      onYes: () => "samtenging",
-      onNo: 17
-    },
-    {
-      question: "Er orðið upphrópun, eins og æ! eða ó!?",
-      type: "yesno",
-      onYes: () => "upphrópun",
-      onNo: 18
-    },
-    {
-      question: "Er orðið AÐ á undan sagnorði?",
-      type: "yesno",
-      onYes: () => "nafnháttarmerki",
-      onNo: () => "atviksorð"
-    }
-  ];
+  const [activeTooltip, setActiveTooltip] = useState(null);
 
   const handleAnswer = (answer) => {
     const currentQ = questions[currentQuestion];
@@ -147,14 +33,43 @@ function App() {
   };
 
   const resetAnalysis = () => {
-    setCurrentQuestion(0); // Fer aftur á innsláttarsíðuna
+    setCurrentQuestion(0);
     setWord('');
     setResult('');
+    setActiveTooltip(null);
   };
 
   const startAnalysis = () => {
     setCurrentQuestion(0);
     setResult('');
+    setActiveTooltip(null);
+  };
+
+  const toggleTooltip = (word) => {
+    setActiveTooltip(activeTooltip === word ? null : word);
+  };
+
+  const renderQuestionText = (text, tooltips) => {
+    const words = text.split(' ');
+    return words.map((word, index) => {
+      if (tooltips && tooltips[word]) {
+        return (
+          <React.Fragment key={index}>
+            <span 
+              className="tooltip-word" 
+              onClick={() => toggleTooltip(word)}
+            >
+              {word}
+              {activeTooltip === word && (
+                <span className="tooltip">{tooltips[word]}</span>
+              )}
+            </span>
+            {' '}
+          </React.Fragment>
+        );
+      }
+      return word + ' ';
+    });
   };
 
   const renderContent = () => {
@@ -173,7 +88,7 @@ function App() {
         <div className="question">
           {questions[currentQuestion] && (
             <>
-              <p>{questions[currentQuestion].question}</p>
+              <p>{renderQuestionText(questions[currentQuestion].question, questions[currentQuestion].tooltips)}</p>
               {questions[currentQuestion].type === "input" ? (
                 <div className="input-container">
                   <input

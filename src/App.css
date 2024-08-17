@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
 :root {
-  --primary-color: #3498db;  /* Blár litur, táknar vatn/sjó */
-  --secondary-color: #2ecc71;  /* Grænn litur, táknar gróður */
-  --accent-color: #e74c3c;  /* Rauður litur, táknar hraunið */
-  --background-color: #ecf0f1;  /* Ljósgrár litur, táknar jökulinn */
-  --text-color: #34495e;  /* Dökkblár litur fyrir texta */
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --accent-color: #e74c3c;
+  --background-color: #ecf0f1;
+  --text-color: #34495e;
+  --tooltip-word-color: #e74c3c;
+  --tooltip-bg-color: rgba(0, 0, 0, 0.8);
 }
 
 body {
@@ -24,13 +26,6 @@ body {
   margin: 0 auto;
 }
 
-h1 {
-  color: var(--primary-color);
-  font-size: 2.5em;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-}
-
 .container {
   background-color: white;
   border-radius: 15px;
@@ -38,13 +33,12 @@ h1 {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.question, .result {
-  margin-bottom: 30px;
+h1, h2 {
+  color: var(--primary-color);
 }
 
-.question p, .result p {
-  font-size: 1.2em;
-  font-weight: 300;
+.question, .result {
+  margin-bottom: 30px;
 }
 
 .input-container, .button-container {
@@ -59,12 +53,6 @@ h1 {
   border: 2px solid var(--primary-color);
   border-radius: 8px;
   transition: all 0.3s ease;
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--secondary-color);
-  box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
 }
 
 .button {
@@ -83,67 +71,62 @@ h1 {
 
 .button:hover {
   background-color: var(--secondary-color);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-.button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.highlight {
-  color: var(--accent-color);
+.tooltip-word {
   font-weight: bold;
+  color: var(--tooltip-word-color);
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
 }
 
-/* Stílar fyrir forsíðu */
-.homepage {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--tooltip-bg-color);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 5px;
 }
 
-.homepage h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--primary-color);
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--tooltip-bg-color) transparent transparent transparent;
 }
 
-.homepage p {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* Media query fyrir símaviðmót */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .App {
     padding: 10px;
   }
-
-  h1 {
-    font-size: 2em;
-  }
-
+  
   .container {
     padding: 20px;
   }
-
-  .input, .button {
-    font-size: 0.9em;
+  
+  .tooltip {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 300px;
+    white-space: normal;
   }
-
-  .homepage h1 {
-    font-size: 1.5rem;
-  }
-
-  .homepage p {
-    font-size: 0.9rem;
-  }
-
-  .homepage .button {
-    font-size: 0.9rem;
-    padding: 8px 16px;
+  
+  .tooltip::after {
+    display: none;
   }
 }
