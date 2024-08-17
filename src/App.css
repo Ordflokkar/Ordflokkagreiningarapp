@@ -1,38 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+:root {
+  --primary-color: #3498db;  /* Blár litur, táknar vatn/sjó */
+  --secondary-color: #2ecc71;  /* Grænn litur, táknar gróður */
+  --accent-color: #e74c3c;  /* Rauður litur, táknar hraunið */
+  --background-color: #ecf0f1;  /* Ljósgrár litur, táknar jökulinn */
+  --text-color: #34495e;  /* Dökkblár litur fyrir texta */
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
 .App {
   text-align: center;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  color: var(--primary-color);
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.container {
+  background-color: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.question, .result {
+  margin-bottom: 30px;
+}
+
+.question p, .result p {
+  font-size: 1.2em;
+  font-weight: 300;
+}
+
+.input-container, .button-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 15px;
+}
+
+.input {
+  padding: 15px;
+  font-size: 1em;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+}
+
+.button {
+  padding: 15px 25px;
+  font-size: 1em;
   color: white;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-.App-link {
-  color: #61dafb;
+.button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.highlight {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Stílar fyrir forsíðu */
+.homepage {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.homepage h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.homepage p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Media query fyrir símaviðmót */
+@media (max-width: 480px) {
+  .App {
+    padding: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  h1 {
+    font-size: 2em;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  .input, .button {
+    font-size: 0.9em;
+  }
+
+  .homepage h1 {
+    font-size: 1.5rem;
+  }
+
+  .homepage p {
+    font-size: 0.9rem;
+  }
+
+  .homepage .button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
   }
 }
