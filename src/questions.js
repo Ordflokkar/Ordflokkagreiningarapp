@@ -24,7 +24,7 @@ export const questions = [
     onYes: 3,
     onNo: () => "fallorð",
     tooltips: {
-     "Fallorð": "Fallorð eru orð sem hægt er að fallbeygja. Þau skiptast í nokkra undirflokka sem hafa mismunandi einkenni. Undirflokkar fallorða eru t.d. nafnorð, lýsingarorð, og töluorð.",
+     "fallorð": "Fallorð eru orð sem hægt er að fallbeygja. Þau skiptast í nokkra undirflokka sem hafa mismunandi einkenni. Undirflokkar fallorða eru t.d. nafnorð, lýsingarorð, og töluorð.",
     }
   },
   {
@@ -42,7 +42,7 @@ export const questions = [
     onYes: () => "lýsingarorð",
     onNo: 5,
     tooltips: {
-      "Stigbreytist": "Stigbreyting er ferli þar sem lýsingarorð breytist eftir stigum, t.d. 'fallegur, fallegri, fallegastubeyging lýsingarorða og atviksorða í stigum. Dæmi: 'breiður, breiðari, breiðastur', 'góðlegur, góðlegri, góðlegastur'r'."
+      "stigbreytist": "Stigbreyting er ferli þar sem lýsingarorð breytist eftir stigum, t.d. 'fallegur, fallegri, fallegastubeyging lýsingarorða og atviksorða í stigum. Dæmi: 'breiður, breiðari, breiðastur', 'góðlegur, góðlegri, góðlegastur'r'."
     }
   },
   {
@@ -51,7 +51,7 @@ export const questions = [
     onYes: () => "töluorð",
     onNo: 6,
     tooltips: {
-      "töluorð": "Töluorð eru orð sem tákna tölur eða magn. Dæmi: 'einn', 'tveir', 'þrír'."
+      "toluorð": "Töluorð eru orð sem tákna tölur eða magn. Dæmi: 'einn', 'tveir', 'þrír'."
     }
   },
   {
@@ -78,7 +78,7 @@ export const questions = [
     onYes: () => "persónufornafn",
     onNo: 9,
     tooltips: {
-      "hán": "Kynhlutlaust persónufornafn í 3. persónu. Notað um fólk sem skilgreinir sig hvorki sem karlkyns né kvenkyns og kýs að nota þetta fornafn. Lýsingarorð sem vísa til kvársins eða stálpsins sem um ræðir eru í hvorugkyni. Dæmi: Regn er stálp og hán er rauðhært."
+      "han": "Kynhlutlaust persónufornafn í 3. persónu. Notað um fólk sem skilgreinir sig hvorki sem karlkyns né kvenkyns og kýs að nota þetta fornafn. Lýsingarorð sem vísa til kvársins eða stálpsins sem um ræðir eru í hvorugkyni. Dæmi: Regn er stálp og hán er rauðhært."
     }
   },
   
@@ -106,7 +106,7 @@ export const questions = [
     onYes: () => "ábendingarfornafn",
     onNo: 12,
     tooltips: {
-      "ábendingarfornafn": "Ábendingarfornöfn eru notuð til að benda á ákveðna hluti eða fyrirbæri."
+      "abendingarfornafn": "Ábendingarfornöfn eru notuð til að benda á ákveðna hluti eða fyrirbæri."
     }
   },
   {
@@ -116,7 +116,7 @@ export const questions = [
     onNo: () => "óákveðið fornafn",
     tooltips: {
       "spurnarfornafn": "Spurnarfornöfn eru notuð til að spyrja spurninga.",
-      "óákveðið fornafn": "Flest óákveðin fornöfn eru talin í þessari vísu: Annar, fáeinir, enginn, neinn, ýmis, báðir, sérhver, hvorugur, sumur, hver og einn, hvor og nokkur, einhver."
+      "oakvedid fornafn": "Flest óákveðin fornöfn eru talin í þessari vísu: Annar, fáeinir, enginn, neinn, ýmis, báðir, sérhver, hvorugur, sumur, hver og einn, hvor og nokkur, einhver."
     }
   },
   {
@@ -126,7 +126,7 @@ export const questions = [
     onNo: 14,
     tooltips: {
       "sagnorð": "Sagnorð eru orð sem beygist í persónu, tölu og hætti og lýsir oft verknaði. Dæmi: ganga, horfa og breyta.",
-      "smáorð": "Smáorð eru orð sem beygjast ekki."
+      "smaorð": "Smáorð eru orð sem beygjast ekki."
       
     }
   },
@@ -136,7 +136,7 @@ export const questions = [
     onYes: 15,
     onNo: () => "smáorð",
     tooltips: {
-      "smáorð": "Smáorð eru orð sem beygjast ekki."
+      "smaorð": "Smáorð eru orð sem beygjast ekki."
     }
   },
   {
@@ -163,7 +163,7 @@ export const questions = [
     onYes: () => "upphrópun",
     onNo: 18,
     tooltips: {
-      "upphrópun": "Upphrópanir eru orð sem tjá tilfinningar eða viðbrögð, oft notuð ein og sér."
+      "upphropun": "Upphrópanir eru orð sem tjá tilfinningar eða viðbrögð, oft notuð ein og sér."
     }
   },
   {
@@ -172,7 +172,7 @@ export const questions = [
     onYes: () => "nafnháttarmerki",
     onNo: () => "atviksorð",
     tooltips: {
-      "nafnháttarmerki": "Nafnháttarmerki er orðflokkur sem aðeins eitt orð tilheyrir: 'að'. Nhm er oft á undan sögn í nafnhætti í setningum. Dæmi: Það er gaman að læra.",
+      "nafnhattarmerki": "Nafnháttarmerki er orðflokkur sem aðeins eitt orð tilheyrir: 'að'. Nhm er oft á undan sögn í nafnhætti í setningum. Dæmi: Það er gaman að læra.",
       "atviksorð": "Atviksorð eru fjölbreytilegur flokkur orða sem tákna hátt, stað, tíma, áherslu o.fl..Dæmi: 'vel', 'inni', 'stundum', 'geysilega'"
     }
   }

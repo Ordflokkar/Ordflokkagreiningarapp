@@ -4,6 +4,7 @@ import Homepage from './Homepage';
 import { questions } from './questions';
 
 function App() {
+  const [answerHistory, setAnswerHistory] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [word, setWord] = useState('');
   const [result, setResult] = useState('');
@@ -11,24 +12,60 @@ function App() {
 
   const handleAnswer = (answer) => {
     const currentQ = questions[currentQuestion];
+    let nextQuestion;
+    let currentAnswer;
+  
     if (currentQ.type === "input") {
       if (word.trim() === '') {
         alert('Vinsamlegast sláðu inn orð til að greina.');
         return;
       }
-      setCurrentQuestion(currentQ.next);
+      nextQuestion = currentQ.next;
+      currentAnswer = word;
     } else if (currentQ.type === "yesno") {
       const next = answer ? currentQ.onYes : currentQ.onNo;
       if (typeof next === "function") {
         const resultMessage = next();
         setResult(`Flott! Orðið <strong>${word}</strong> er ${resultMessage}.`);
-        setCurrentQuestion(-2); // -2 táknar niðurstöðusíðu
+        nextQuestion = -2; // -2 táknar niðurstöðusíðu
       } else if (typeof next === "number") {
-        setCurrentQuestion(next);
+        nextQuestion = next;
       } else {
         setResult(`Flott! Orðið <strong>${word}</strong> er ${next}.`);
-        setCurrentQuestion(-2); // -2 táknar niðurstöðusíðu
+        nextQuestion = -2; // -2 táknar niðurstöðusíðu
       }
+      currentAnswer = answer ? "Já" : "Nei";
+    }
+  
+    setAnswerHistory([...answerHistory, { 
+      question: currentQuestion, 
+      answer: currentAnswer, 
+      word: word 
+    }]);
+    setCurrentQuestion(nextQuestion);
+  };
+  const handleGoBack = () => {
+    if (answerHistory.length > 0) {
+      const newHistory = answerHistory.slice(0, -1);
+      setAnswerHistory(newHistory);
+      const lastEntry = newHistory[newHistory.length - 1];
+      if (lastEntry) {
+        setCurrentQuestion(lastEntry.question);
+        setWord(lastEntry.word);
+      } else {
+        setCurrentQuestion(-1);
+        setWord('');
+      }
+      setResult('');
+    }
+  };
+  const getCurrentQuestionOrAnswer = () => {
+    if (currentQuestion === -2) {
+      return result;
+    } else if (currentQuestion >= 0 && currentQuestion < questions.length) {
+      return questions[currentQuestion].question;
+    } else {
+      return '';
     }
   };
 
@@ -50,18 +87,21 @@ function App() {
   };
 
   const renderQuestionText = (text, tooltips) => {
-    const words = text.split(' ');
+    if (!tooltips) return text;  // Skilar texta óbreyttum ef engin tooltips eru til staðar
+  
+    const words = text.split(/\s+/);  // Skiptir textanum í orð, tekur tillit til allra bilstafa
     return words.map((word, index) => {
-      if (tooltips && tooltips[word]) {
+      const cleanWord = word.replace(/[.,!?;:()'"]/g, '').toLowerCase();  // Hreinsar orðið af greinarmerkjum og gerir það lágstafa
+      if (tooltips[cleanWord]) {
         return (
           <React.Fragment key={index}>
-            <span 
-              className="tooltip-word" 
-              onClick={() => toggleTooltip(word)}
+            <span
+              className="tooltip-word"
+              onClick={() => toggleTooltip(cleanWord)}
             >
               {word}
-              {activeTooltip === word && (
-                <span className="tooltip">{tooltips[word]}</span>
+              {activeTooltip === cleanWord && (
+                <span className="tooltip">{tooltips[cleanWord]}</span>
               )}
             </span>
             {' '}
@@ -75,20 +115,12 @@ function App() {
   const renderContent = () => {
     if (currentQuestion === -1) {
       return <Homepage startAnalysis={startAnalysis} />;
-    } else if (currentQuestion === -2) {
-      return (
-        <div className="result">
-          <h2>Niðurstaða greiningar</h2>
-          <p dangerouslySetInnerHTML={{ __html: result }} />
-          <button onClick={resetAnalysis} className="button">Greina annað orð</button>
-        </div>
-      );
     } else {
       return (
         <div className="question">
-          {questions[currentQuestion] && (
+          <p dangerouslySetInnerHTML={{ __html: getCurrentQuestionOrAnswer() }} />
+          {currentQuestion !== -2 && questions[currentQuestion] && (
             <>
-              <p>{renderQuestionText(questions[currentQuestion].question, questions[currentQuestion].tooltips)}</p>
               {questions[currentQuestion].type === "input" ? (
                 <div className="input-container">
                   <input
@@ -98,15 +130,31 @@ function App() {
                     className="input"
                     placeholder="Sláðu inn orð"
                   />
-                  <button onClick={() => handleAnswer(true)} className="button">Áfram</button>
+                  <div className="button-container">
+                    <button onClick={() => handleAnswer(true)} className="button">Áfram</button>
+                    {answerHistory.length > 0 && (
+                      <button onClick={handleGoBack} className="back-button">Til baka</button>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="button-container">
                   <button onClick={() => handleAnswer(true)} className="button">Já</button>
                   <button onClick={() => handleAnswer(false)} className="button">Nei</button>
+                  {answerHistory.length > 0 && (
+                    <button onClick={handleGoBack} className="back-button">Til baka</button>
+                  )}
                 </div>
               )}
             </>
+          )}
+          {currentQuestion === -2 && (
+            <div className="button-container">
+              <button onClick={resetAnalysis} className="button">Greina annað orð</button>
+              {answerHistory.length > 0 && (
+                <button onClick={handleGoBack} className="back-button">Til baka</button>
+              )}
+            </div>
           )}
         </div>
       );
