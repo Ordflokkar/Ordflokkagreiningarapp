@@ -10,6 +10,10 @@ function App() {
   const [result, setResult] = useState('');
   const [activeTooltip, setActiveTooltip] = useState(null);
 
+  const createResultText = (word, result) => {
+    return `Flott! Orðið ${word} er ${result}.`;
+  };
+
   const handleAnswer = (answer) => {
     const currentQ = questions[currentQuestion];
     let nextQuestion;
@@ -26,13 +30,13 @@ function App() {
       const next = answer ? currentQ.onYes : currentQ.onNo;
       if (typeof next === "function") {
         const resultMessage = next();
-        setResult(`Flott! Orðið <strong>${word}</strong> er ${resultMessage}.`);
-        nextQuestion = -2; // -2 táknar niðurstöðusíðu
+        setResult(createResultText(word, resultMessage));
+        nextQuestion = -2; 
       } else if (typeof next === "number") {
         nextQuestion = next;
       } else {
-        setResult(`Flott! Orðið <strong>${word}</strong> er ${next}.`);
-        nextQuestion = -2; // -2 táknar niðurstöðusíðu
+        setResult(createResultText(word, next));
+        nextQuestion = -2; 
       }
       currentAnswer = answer ? "Já" : "Nei";
     }
@@ -44,6 +48,7 @@ function App() {
     }]);
     setCurrentQuestion(nextQuestion);
   };
+
   const handleGoBack = () => {
     if (answerHistory.length > 0) {
       const newHistory = answerHistory.slice(0, -1);
@@ -59,6 +64,7 @@ function App() {
       setResult('');
     }
   };
+
   const getCurrentQuestionOrAnswer = () => {
     if (currentQuestion === -2) {
       return result;
@@ -87,11 +93,11 @@ function App() {
   };
 
   const renderQuestionText = (text, tooltips) => {
-    if (!tooltips) return text;  // Skilar texta óbreyttum ef engin tooltips eru til staðar
+    if (!tooltips) return text;  
   
-    const words = text.split(/\s+/);  // Skiptir textanum í orð, tekur tillit til allra bilstafa
+    const words = text.split(/\s+/);  
     return words.map((word, index) => {
-      const cleanWord = word.replace(/[.,!?;:()'"]/g, '').toLowerCase();  // Hreinsar orðið af greinarmerkjum og gerir það lágstafa
+      const cleanWord = word.replace(/[.,!?;:()'"]/g, '').toLowerCase();  
       if (tooltips[cleanWord]) {
         return (
           <React.Fragment key={index}>
@@ -115,11 +121,23 @@ function App() {
   const renderContent = () => {
     if (currentQuestion === -1) {
       return <Homepage startAnalysis={startAnalysis} />;
+    } else if (currentQuestion === -2) {
+      return (
+        <div className="result">
+          <p>{result}</p>
+          <div className="button-container">
+            <button onClick={resetAnalysis} className="button">Greina annað orð</button>
+            {answerHistory.length > 0 && (
+              <button onClick={handleGoBack} className="back-button">Til baka</button>
+            )}
+          </div>
+        </div>
+      );
     } else {
       return (
         <div className="question">
-          <p dangerouslySetInnerHTML={{ __html: getCurrentQuestionOrAnswer() }} />
-          {currentQuestion !== -2 && questions[currentQuestion] && (
+          <p>{renderQuestionText(getCurrentQuestionOrAnswer(), questions[currentQuestion]?.tooltips)}</p>
+          {questions[currentQuestion] && (
             <>
               {questions[currentQuestion].type === "input" ? (
                 <div className="input-container">
@@ -147,14 +165,6 @@ function App() {
                 </div>
               )}
             </>
-          )}
-          {currentQuestion === -2 && (
-            <div className="button-container">
-              <button onClick={resetAnalysis} className="button">Greina annað orð</button>
-              {answerHistory.length > 0 && (
-                <button onClick={handleGoBack} className="back-button">Til baka</button>
-              )}
-            </div>
           )}
         </div>
       );
